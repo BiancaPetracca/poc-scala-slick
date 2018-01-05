@@ -1,0 +1,6 @@
+target/
+.idea/
+*.iml
+*/*.iml
+*.log
+src/main/resources/application.conf
