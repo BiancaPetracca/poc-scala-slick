@@ -1,4 +1,5 @@
 package slickpoc.model
+
 import slick.jdbc.MySQLProfile.api._
 
 /**
@@ -13,13 +14,17 @@ object Tables {
 
     def name = column[String]("item_name")
 
+    def age = column[AgeRange]("item_user_age")
+
+    def species = column[Species.Species]("item_species")
+
     def username = column[String]("item_user_username")
 
     def surname = column[String]("item_user_surname")
 
     def user = (username, surname) <> (User.tupled, User.unapply)
 
-    override def * = (id, name, user) <> (Item.tupled, Item.unapply)
+    override def * = (id, name, age, species, user) <> (Item.tupled, Item.unapply)
   }
 
   class Users(tag: Tag) extends Table[User](tag, "USERS") {
@@ -30,7 +35,6 @@ object Tables {
 
     override def * = (name, surname) <> (User.tupled, User.unapply)
   }
-
 
   val users = TableQuery[Users]
   val items = TableQuery[Items]

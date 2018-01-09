@@ -4,7 +4,7 @@ import org.scalatest.{FlatSpec, Matchers}
 import slick.jdbc.MySQLProfile.api._
 import slickpoc.config.DB
 import slickpoc.model.Tables._
-import slickpoc.model.{Item, User}
+import slickpoc.model.{CHILDREN, Item, Species, User}
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -41,8 +41,11 @@ class BasicCRUDOperationsTest extends FlatSpec with Matchers {
 
   it should "insert an item" in {
     val expectedUser: User = User("userA", "aaa")
-    db.run(DBIO.seq(items.forceInsert(Item(1, "itemA", expectedUser))))
-    Await.result(db.run(items.result), 1 second).head.user should equal(expectedUser)
+    db.run(DBIO.seq(items.forceInsert(Item(1, "itemA", CHILDREN, Species.SIMPLE, expectedUser))))
+    val actualResult = Await.result(db.run(items.result), 1 second).head
+    actualResult.user should equal(expectedUser)
+    actualResult.species should equal(Species.SIMPLE)
+    actualResult.ageRange should equal(CHILDREN)
   }
 
 }
